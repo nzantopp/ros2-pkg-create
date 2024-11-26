@@ -25,8 +25,7 @@ from {{ package_name }}_interfaces.action import Fibonacci
 class {{ node_class_name }}(Node):
 
     def __init__(self):
-        """Constructor"""
-
+        """Constructor."""
         super().__init__('{{ node_name }}')
 
 {% if has_params %}
@@ -80,7 +79,6 @@ class {{ node_class_name }}(Node):
         Returns:
             Any: parameter value
         """
-
         # declare parameter
         param_desc = ParameterDescriptor()
         param_desc.description = description
@@ -126,7 +124,6 @@ class {{ node_class_name }}(Node):
         Returns:
             SetParametersResult: parameter change result
         """
-
         for param in parameters:
             if param.name in self.auto_reconfigurable_params:
                 setattr(self, param.name, param.value)
@@ -141,7 +138,6 @@ class {{ node_class_name }}(Node):
     def setup(self):
         """Sets up subscribers, publishers, etc. to configure the node."""
 {% if has_params %}
-
         # callback for dynamic parameter configuration
         self.parameters_callback = self.add_on_set_parameters_callback(
             self.parametersCallback)
@@ -198,7 +194,6 @@ class {{ node_class_name }}(Node):
         Args:
             msg (Int32): message
         """
-
         self.get_logger().info(f"Message received: '{msg.data}'")
 {% endif %}
 {% if has_service_server %}
@@ -213,7 +208,6 @@ class {{ node_class_name }}(Node):
         Returns:
             SetBool.Response: service response
         """
-
         self.get_logger().info('Received service request')
         response.success = True
 
@@ -230,7 +224,6 @@ class {{ node_class_name }}(Node):
         Returns:
             GoalResponse: goal response
         """
-
         self.get_logger().info('Received action goal request')
 
         return GoalResponse.ACCEPT
@@ -244,7 +237,6 @@ class {{ node_class_name }}(Node):
         Returns:
             CancelResponse: cancel response
         """
-
         self.get_logger().info('Received request to cancel action goal')
 
         return CancelResponse.ACCEPT
@@ -268,7 +260,6 @@ class {{ node_class_name }}(Node):
         Returns:
             Fibonacci.Result: action goal result
         """
-
         self.get_logger().info('Executing action goal')
 
         # define a sleeping rate between computing individual Fibonacci numbers
@@ -314,7 +305,6 @@ class {{ node_class_name }}(Node):
     def timerCallback(self):
         """Processes timer triggers.
         """
-
         self.get_logger().info('Timer triggered')
 {% endif %}
 {% if auto_shutdown %}
@@ -322,7 +312,6 @@ class {{ node_class_name }}(Node):
     def autoShutdownTimerCallback(self):
         """Processes timer triggers to auto-shutdown the node.
         """
-
         self.get_logger().info('Shutting down')
         raise SystemExit(0)
 {% endif %}
