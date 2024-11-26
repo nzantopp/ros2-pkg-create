@@ -25,7 +25,7 @@ from {{ package_name }}_interfaces.action import Fibonacci
 class {{ node_class_name }}(Node):
 
     def __init__(self):
-        """Constructor."""
+        """Initialize the node."""
         super().__init__('{{ node_name }}')
 
 {% if has_params %}
@@ -61,7 +61,7 @@ class {{ node_class_name }}(Node):
         to_value: Optional[Union[int, float]] = None,
         step_value: Optional[Union[int, float]] = None,
         additional_constraints: str = '') -> Any:
-        """Declares and loads a ROS parameter.
+        """Declare and load a ROS parameter.
 
         Args:
             name (str): name
@@ -116,7 +116,7 @@ class {{ node_class_name }}(Node):
 
     def parametersCallback(self,
                            parameters: rclpy.Parameter) -> SetParametersResult:
-        """Handles reconfiguration when a parameter value is changed.
+        """Handle reconfiguration when a parameter value is changed.
 
         Args:
             parameters (rclpy.Parameter): parameters
@@ -136,7 +136,7 @@ class {{ node_class_name }}(Node):
 {% endif %}
 
     def setup(self):
-        """Sets up subscribers, publishers, etc. to configure the node."""
+        """Set up subscribers, publishers, etc. to configure the node."""
 {% if has_params %}
         # callback for dynamic parameter configuration
         self.parameters_callback = self.add_on_set_parameters_callback(
@@ -189,7 +189,7 @@ class {{ node_class_name }}(Node):
 {% if has_subscriber %}
 
     def topicCallback(self, msg: Int32):
-        """Processes messages received by a subscriber.
+        """Process messages received by a subscriber.
 
         Args:
             msg (Int32): message
@@ -199,7 +199,7 @@ class {{ node_class_name }}(Node):
 {% if has_service_server %}
 
     def serviceCallback(self, request: SetBool.Request, response: SetBool.Response) -> SetBool.Response:
-        """Processes service requests.
+        """Process service requests.
 
         Args:
             request (SetBool.Request): service request
@@ -216,7 +216,7 @@ class {{ node_class_name }}(Node):
 {% if has_action_server %}
 
     def actionHandleGoal(self, goal: Fibonacci.Goal) -> GoalResponse:
-        """Processes action goal requests
+        """Process action goal requests
 
         Args:
             goal (Fibonacci.Goal): action goal
@@ -229,7 +229,7 @@ class {{ node_class_name }}(Node):
         return GoalResponse.ACCEPT
 
     def actionHandleCancel(self, goal: Fibonacci.Goal) -> CancelResponse:
-        """Processes action cancel requests.
+        """Process action cancel requests.
 
         Args:
             goal (Fibonacci.Goal): action goal
@@ -242,7 +242,7 @@ class {{ node_class_name }}(Node):
         return CancelResponse.ACCEPT
 
     def actionHandleAccepted(self, goal: Fibonacci.Goal):
-        """Processes accepted action goal requests.
+        """Process accepted action goal requests.
 
         Args:
             goal (Fibonacci.Goal): action goal
