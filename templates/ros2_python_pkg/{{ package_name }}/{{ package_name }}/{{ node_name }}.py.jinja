@@ -54,7 +54,8 @@ class {{ node_class_name }}(Node):
         self.setup()
 {% if has_params %}
 
-    def declareAndLoadParameter(self,
+    def declareAndLoadParameter(
+        self,
         name: str,
         param_type: rclpy.Parameter.Type,
         description: str,
