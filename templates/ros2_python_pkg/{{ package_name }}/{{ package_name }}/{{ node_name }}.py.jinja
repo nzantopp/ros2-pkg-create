@@ -16,14 +16,14 @@ import rclpy
 from rclpy.action import ActionServer, CancelResponse, GoalResponse
 {% endif %}
 from rclpy.node import Node
+{% if has_action_server %}
+from {{ package_name }}_interfaces.action import Fibonacci
+{% endif %}
 {% if has_subscriber or has_publisher %}
 from std_msgs.msg import Int32
 {% endif %}
 {% if has_service_server %}
 from std_srvs.srv import SetBool
-{% endif %}
-{% if has_action_server %}
-from {{ package_name }}_interfaces.action import Fibonacci
 {% endif %}
 
 
@@ -220,7 +220,11 @@ class {{ node_class_name }}(Node):
 {% endif %}
 {% if has_service_server %}
 
-    def serviceCallback(self, request: SetBool.Request, response: SetBool.Response) -> SetBool.Response:
+    def serviceCallback(
+        self,
+        request: SetBool.Request,
+        response: SetBool.Response
+    ) -> SetBool.Response:
         """Process service requests.
 
         Args:
@@ -238,7 +242,7 @@ class {{ node_class_name }}(Node):
 {% if has_action_server %}
 
     def actionHandleGoal(self, goal: Fibonacci.Goal) -> GoalResponse:
-        """Process action goal requests
+        """Process action goal requests.
 
         Args:
             goal (Fibonacci.Goal): action goal
@@ -269,12 +273,11 @@ class {{ node_class_name }}(Node):
         Args:
             goal (Fibonacci.Goal): action goal
         """
-
         # execute action in a separate thread to avoid blocking
         goal.execute()
 
     async def actionExecute(self, goal: Fibonacci.Goal) -> Fibonacci.Result:
-        """Executes an action.
+        """Execute an action.
 
         Args:
             goal (Fibonacci.Goal): action goal
@@ -305,7 +308,9 @@ class {{ node_class_name }}(Node):
                 return result
 
             # compute the next Fibonacci number
-            feedback.partial_sequence.append(feedback.partial_sequence[i] + feedback.partial_sequence[i-1])
+            feedback.partial_sequence.append(
+                feedback.partial_sequence[i] + feedback.partial_sequence[i-1]
+            )
 
             # publish the current sequence as action feedback
             goal.publish_feedback(feedback)
@@ -325,14 +330,13 @@ class {{ node_class_name }}(Node):
 {% if has_timer %}
 
     def timerCallback(self):
-        """Processes timer triggers.
-        """
+        """Process timer triggers."""
         self.get_logger().info('Timer triggered')
 {% endif %}
 {% if auto_shutdown %}
 
     def autoShutdownTimerCallback(self):
-        """Processes timer triggers to auto-shutdown the node.
+        """Process timer triggers to auto-shutdown the node.
         """
         self.get_logger().info('Shutting down')
         raise SystemExit(0)
