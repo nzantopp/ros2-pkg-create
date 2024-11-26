@@ -12,21 +12,35 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
     args = [
-        DeclareLaunchArgument("name", default_value="ros2_cpp_node", description="node name"),
-        DeclareLaunchArgument("namespace", default_value="", description="node namespace"),
-        DeclareLaunchArgument("params", default_value=os.path.join(get_package_share_directory("ros2_cpp_component_pkg"), "config", "params.yml"), description="path to parameter file"),
-        DeclareLaunchArgument("log_level", default_value="info", description="ROS logging level (debug, info, warn, error, fatal)"),
+        DeclareLaunchArgument(
+            'name', default_value='ros2_cpp_node', description='node name'
+            ),
+        DeclareLaunchArgument(
+            'namespace', default_value='', description='node namespace'
+            ),
+        DeclareLaunchArgument(
+            'params',
+            default_value=os.path.join(
+                get_package_share_directory('ros2_cpp_component_pkg'), 'config', 'params.yml'
+                ),
+            description='path to parameter file'
+            ),
+        DeclareLaunchArgument(
+            'log_level',
+            default_value='info',
+            description='ROS logging level (debug, info, warn, error, fatal)'
+            ),
     ]
 
     nodes = [
         Node(
-            package="ros2_cpp_component_pkg",
-            executable="ros2_cpp_node",
-            namespace=LaunchConfiguration("namespace"),
-            name=LaunchConfiguration("name"),
-            parameters=[LaunchConfiguration("params")],
-            arguments=["--ros-args", "--log-level", LaunchConfiguration("log_level")],
-            output="screen",
+            package='ros2_cpp_component_pkg',
+            executable='ros2_cpp_node',
+            namespace=LaunchConfiguration('namespace'),
+            name=LaunchConfiguration('name'),
+            parameters=[LaunchConfiguration('params')],
+            arguments=['--ros-args', '--log-level', LaunchConfiguration('log_level')],
+            output='screen',
             emulate_tty=True,
         )
     ]

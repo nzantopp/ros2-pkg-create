@@ -28,7 +28,8 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'log_level',
             default_value='info',
-            description='ROS logging level (debug, info, warn, error, fatal)'),
+            description='ROS logging level (debug, info, warn, error, fatal)'
+            ),
     ]
 
     nodes = [
