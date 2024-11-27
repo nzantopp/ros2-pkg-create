@@ -23,13 +23,15 @@ class Ros2PythonNode(Node):
         self.publisher = None
 
         self.param = 1.0
-        self.param = self.declareAndLoadParameter(name='param',
-                                                  param_type=rclpy.Parameter.Type.DOUBLE,
-                                                  description='TODO',
-                                                  default=self.param,
-                                                  from_value=0.0,
-                                                  to_value=10.0,
-                                                  step_value=0.1)
+        self.param = self.declareAndLoadParameter(
+            name='param',
+            param_type=rclpy.Parameter.Type.DOUBLE,
+            description='TODO',
+            default=self.param,
+            from_value=0.0,
+            to_value=10.0,
+            step_value=0.1
+        )
 
         self.setup()
 
@@ -73,16 +75,12 @@ class Ros2PythonNode(Node):
             if param_type == rclpy.Parameter.Type.INTEGER:
                 step_value = step_value if step_value is not None else 1
                 param_desc.integer_range = [
-                    IntegerRange(
-                        from_value=from_value, to_value=to_value, step=step_value
-                    )
+                    IntegerRange(from_value=from_value, to_value=to_value, step=step_value)
                 ]
             elif param_type == rclpy.Parameter.Type.DOUBLE:
                 step_value = step_value if step_value is not None else 1.0
                 param_desc.floating_point_range = [
-                    FloatingPointRange(
-                        from_value=from_value, to_value=to_value, step=step_value
-                    )
+                    FloatingPointRange(from_value=from_value, to_value=to_value, step=step_value)
                 ]
             else:
                 self.get_logger().warn(
@@ -96,9 +94,7 @@ class Ros2PythonNode(Node):
             self.get_logger().info(f"Loaded parameter '{name}': {param}")
         except rclpy.exceptions.ParameterUninitializedException:
             if is_required:
-                self.get_logger().fatal(
-                    f"Missing required parameter '{name}', exiting"
-                )
+                self.get_logger().fatal(f"Missing required parameter '{name}', exiting")
                 raise SystemExit(1)
             else:
                 self.get_logger().warn(
@@ -113,8 +109,7 @@ class Ros2PythonNode(Node):
 
         return param
 
-    def parametersCallback(self,
-                           parameters: rclpy.Parameter) -> SetParametersResult:
+    def parametersCallback(self, parameters: rclpy.Parameter) -> SetParametersResult:
         """Handle reconfiguration when a parameter value is changed.
 
         Args:
@@ -138,20 +133,18 @@ class Ros2PythonNode(Node):
     def setup(self):
         """Set up subscribers, publishers, etc. to configure the node."""
         # callback for dynamic parameter configuration
-        self.parameters_callback = self.add_on_set_parameters_callback(
-            self.parametersCallback)
+        self.parameters_callback = self.add_on_set_parameters_callback(self.parametersCallback)
 
         # subscriber for handling incoming messages
-        self.subscriber = self.create_subscription(Int32,
-                                                   '~/input',
-                                                   self.topicCallback,
-                                                   qos_profile=10)
+        self.subscriber = self.create_subscription(
+            Int32, '~/input', self.topicCallback, qos_profile=10
+        )
         self.get_logger().info(f"Subscribed to '{self.subscriber.topic_name}'")
 
         # publisher for publishing outgoing messages
-        self.publisher = self.create_publisher(Int32,
-                                               '~/output',
-                                               qos_profile=10)
+        self.publisher = self.create_publisher(
+            Int32, '~/output', qos_profile=10
+        )
         self.get_logger().info(f"Publishing to '{self.publisher.topic_name}'")
 
     def topicCallback(self, msg: Int32):
