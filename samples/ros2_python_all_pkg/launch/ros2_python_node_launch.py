@@ -46,7 +46,7 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
-           *args,
-           *nodes,
+            *args,
+            *nodes,
         ]
     )
